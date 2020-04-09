@@ -147,7 +147,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
 
     os_profile {
         computer_name  = "myvm"
-        admin_username = "azureuser"
+        admin_username = "root"
         admin_password = var.pw
     }
 
@@ -166,23 +166,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
 
     tags = {
         environment = "Terraform Demo"
-    }
-
-#    provisioner "remote-exec" {
-#      inline = [
-#        "sleep 10",
-#        "echo 'export BLAH=123' >> /etc/bash.bashrc",
-#        "sleep 10"
-#      ]
-#
-#      connection {
-#        host        = output.public_ip_address
-#        type        = "ssh"
-#        password    = var.pw
-#        user        = "azureuser"
-#        timeout     = "10s"
-#      }
-#    }
+    
 }
 
 data "azurerm_public_ip" "pip" {
@@ -200,15 +184,13 @@ resource "null_resource" "proxy_env" {
     host        = "${azurerm_public_ip.myterraformpublicip.ip_address}"
         type        = "ssh"
         password    = var.pw
-        user        = "azureuser"
+        user        = "root"
         timeout     = "10m"
   }
 
   provisioner "remote-exec" {
       inline = [
-        "sleep 10",
-        "echo 'export BLAH=123' >> /etc/bash.bashrc",
-        "sleep 10"
+        "echo 'export BLAH=123' >> /etc/bash.bashrc"
       ]
   }
 }
