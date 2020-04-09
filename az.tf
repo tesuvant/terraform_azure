@@ -168,6 +168,16 @@ resource "azurerm_virtual_machine" "myterraformvm" {
         environment = "Terraform Demo"
     }
 
+
+data "azurerm_public_ip" "pip" {
+  name                = azurerm_public_ip.myterraformpublicip.name
+  resource_group_name = azurerm_virtual_machine.myterraformvm.resource_group_name
+}
+
+output "public_ip_address" {
+  value = data.azurerm_public_ip.pip.ip_address
+}
+
     provisioner "remote-exec" {
       inline = [
         "sleep 10",
@@ -185,14 +195,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
     }
 }
 
-data "azurerm_public_ip" "pip" {
-  name                = azurerm_public_ip.myterraformpublicip.name
-  resource_group_name = azurerm_virtual_machine.myterraformvm.resource_group_name
-}
 
-output "public_ip_address" {
-  value = data.azurerm_public_ip.pip.ip_address
-}
 
 
 
