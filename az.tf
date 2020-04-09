@@ -143,6 +143,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
     
     delete_os_disk_on_termination = false
     storage_os_disk {
+        name               = "md2"
         create_option      = "attach"
         managed_disk_id = "${azurerm_managed_disk.osdisk.id}"
     }
