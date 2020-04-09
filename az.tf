@@ -197,7 +197,7 @@ output "public_ip_address" {
 resource "null_resource" "proxy_env" {
 
   connection {
-    host        = "${azurerm_public_ip.myterraformpublicip.fqdn}"
+    host        = "${azurerm_public_ip.myterraformpublicip.ipAddress}"
         type        = "ssh"
         password    = var.pw
         user        = "azureuser"
