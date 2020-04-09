@@ -166,7 +166,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
 
     tags = {
         environment = "Terraform Demo"
-    
+    }
 }
 
 data "azurerm_public_ip" "pip" {
@@ -194,11 +194,3 @@ resource "null_resource" "proxy_env" {
       ]
   }
 }
-
-
-
-
-#  host        = "${azurerm_public_ip.pip.ip_address}"
-#  host        = var.host_ip
-#  host = "${element(azurerm_public_ip.myterraformpublicip.*.ip_address, count.index)}"
-#        host        = azurerm_public_ip.myterraformpublicip.ip_address
