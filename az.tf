@@ -52,7 +52,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
     location                     = "westeurope"
     resource_group_name          = azurerm_resource_group.myterraformgroup.name
     allocation_method            = "Static"
-    domain_name_label            = "tfiscool"
+#    domain_name_label            = "tfiscool"
     tags = {
         environment = "Terraform Demo"
     }
@@ -129,7 +129,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
     location              = "westeurope"
     resource_group_name   = azurerm_resource_group.myterraformgroup.name
     network_interface_ids = [azurerm_network_interface.myterraformnic.id]
-    vm_size               = "Standard_B1ls"
+    vm_size               = "Standard_B2S"
 
     storage_os_disk {
         name              = "myOsDisk"
