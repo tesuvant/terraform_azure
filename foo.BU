@@ -3,7 +3,7 @@ variable "subscription_id" { type = string }
 variable "client_id"       { type = string }
 variable "client_secret"   { type = string }
 variable "tenant_id"       { type = string }
-variable "pw"              { type = string }
+variable "host_ip"         { type = string }
 
 # Configure the Azure Provider
 provider "azurerm" {
@@ -148,7 +148,6 @@ resource "azurerm_virtual_machine" "myterraformvm" {
     os_profile {
         computer_name  = "myvm"
         admin_username = "azureuser"
-        admin_password = var.pw
     }
 
     os_profile_linux_config {
@@ -176,9 +175,9 @@ resource "azurerm_virtual_machine" "myterraformvm" {
       ]
 
       connection {
-        host = ${azurerm_public_ip.myterraformpublicip_ip_pub.fqdn}
+        host = "${element(azurerm_public_ip.myterraformpublicip.*.ip_address, count.index)}"
         type        = "ssh"
-        password    = var.pw
+        private_key = ""
         user        = "root"
         timeout     = "1m"
       }
