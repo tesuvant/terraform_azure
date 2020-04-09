@@ -123,16 +123,6 @@ resource "azurerm_storage_account" "mystorageaccount" {
     }
 }
 
-
-resource "azurerm_managed_disk" "osdisk" {
-  name                 = "md"
-  resource_group_name  = azurerm_resource_group.myterraformgroup.name
-  location             = "westeurope"
-  storage_account_type = "Standard_LRS"
-  create_option        = "Empty"
-  disk_size_gb         = "1"
-}
-
 # Create virtual machine
 resource "azurerm_virtual_machine" "myterraformvm" {
     name                  = "myVM"
@@ -140,20 +130,13 @@ resource "azurerm_virtual_machine" "myterraformvm" {
     resource_group_name   = azurerm_resource_group.myterraformgroup.name
     network_interface_ids = [azurerm_network_interface.myterraformnic.id]
     vm_size               = "Standard_B1ls"
-    
-    delete_os_disk_on_termination = false
-    storage_os_disk {
-        name               = "md2"
-        create_option      = "attach"
-        managed_disk_id = "${azurerm_managed_disk.osdisk.id}"
-    }
 
-#    storage_os_disk {
-#        name              = "myOsDisk"
-#        caching           = "ReadWrite"
-#        create_option     = "FromImage"
-#        managed_disk_type = "Premium_LRS"
-#    }
+    storage_os_disk {
+        name              = "myOsDisk"
+        caching           = "ReadWrite"
+        create_option     = "FromImage"
+        managed_disk_type = "Premium_LRS"
+    }
 
     storage_image_reference {
         publisher = "Canonical"
