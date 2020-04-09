@@ -168,7 +168,9 @@ resource "azurerm_virtual_machine" "myterraformvm" {
 
     provisioner "remote-exec" {
       inline = [
+        "sleep 10",
         "echo 'export BLAH=123' >> /etc/bash.bashrc",
+        "sleep 10"
       ]
     }
 }
