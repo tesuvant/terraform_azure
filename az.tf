@@ -176,7 +176,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
       ]
 
       connection {
-        host        = ${azurerm_public_ip.myterraformpublicip.id}
+        host        = azurerm_public_ip.myterraformpublicip.i
         type        = "ssh"
         password    = var.pw
         user        = "azureuser"
