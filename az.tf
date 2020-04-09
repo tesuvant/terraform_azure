@@ -51,7 +51,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
     name                         = "myPublicIP"
     location                     = "westeurope"
     resource_group_name          = azurerm_resource_group.myterraformgroup.name
-    allocation_method            = "Dynamic"
+    allocation_method            = "Static"
 
     tags = {
         environment = "Terraform Demo"
@@ -176,7 +176,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
       ]
 
       connection {
-        host        = "52.232.75.228"
+        host        = ${azurerm_public_ip.myterraformpublicip.id}
         type        = "ssh"
         password    = var.pw
         user        = "azureuser"
