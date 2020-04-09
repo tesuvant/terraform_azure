@@ -52,7 +52,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
     location                     = "westeurope"
     resource_group_name          = azurerm_resource_group.myterraformgroup.name
     allocation_method            = "Static"
-
+    domain_name_label            = "tfiscool"
     tags = {
         environment = "Terraform Demo"
     }
@@ -168,24 +168,21 @@ resource "azurerm_virtual_machine" "myterraformvm" {
         environment = "Terraform Demo"
     }
 
-
-
-
-    provisioner "remote-exec" {
-      inline = [
-        "sleep 10",
-        "echo 'export BLAH=123' >> /etc/bash.bashrc",
-        "sleep 10"
-      ]
-
-      connection {
-        host        = output.public_ip_address
-        type        = "ssh"
-        password    = var.pw
-        user        = "azureuser"
-        timeout     = "10s"
-      }
-    }
+#    provisioner "remote-exec" {
+#      inline = [
+#        "sleep 10",
+#        "echo 'export BLAH=123' >> /etc/bash.bashrc",
+#        "sleep 10"
+#      ]
+#
+#      connection {
+#        host        = output.public_ip_address
+#        type        = "ssh"
+#        password    = var.pw
+#        user        = "azureuser"
+#        timeout     = "10s"
+#      }
+#    }
 }
 
 data "azurerm_public_ip" "pip" {
@@ -196,6 +193,26 @@ data "azurerm_public_ip" "pip" {
 output "public_ip_address" {
   value = data.azurerm_public_ip.pip.ip_address
 }
+
+resource "null_resource" "proxy_env" {
+
+  connection {
+    host        = "${azurerm_public_ip.myterraformpublicip.fqdn}"
+        type        = "ssh"
+        password    = var.pw
+        user        = "azureuser"
+        timeout     = "10s"
+  }
+
+  provisioner "remote-exec" {
+      inline = [
+        "sleep 10",
+        "echo 'export BLAH=123' >> /etc/bash.bashrc",
+        "sleep 10"
+      ]
+  }
+}
+
 
 
 
