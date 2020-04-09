@@ -125,6 +125,7 @@ resource "azurerm_storage_account" "mystorageaccount" {
 
 
 resource "azurerm_managed_disk" "osdisk" {
+  name                 = "md"
   location             = "westeurope"
   storage_account_type = "Standard_LRS"
   create_option        = "Empty"
