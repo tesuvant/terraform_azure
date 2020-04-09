@@ -131,12 +131,12 @@ resource "azurerm_virtual_machine" "myterraformvm" {
     network_interface_ids = [azurerm_network_interface.myterraformnic.id]
     vm_size               = "Standard_B1ls"
 
-    storage_os_disk {
-        name              = "myOsDisk"
-        caching           = "ReadWrite"
-        create_option     = "FromImage"
-        managed_disk_type = "Premium_LRS"
-    }
+#    storage_os_disk {
+#        name              = "myOsDisk"
+#        caching           = "ReadWrite"
+#        create_option     = "FromImage"
+#        managed_disk_type = "Premium_LRS"
+#    }
 
     storage_image_reference {
         publisher = "Canonical"
@@ -176,7 +176,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
       ]
 
       connection {
-        host        = azurerm_public_ip.myterraformpublicip.*.ipAddress
+        host        = "52.232.75.228"
         type        = "ssh"
         password    = var.pw
         user        = "azureuser"
