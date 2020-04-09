@@ -58,6 +58,16 @@ resource "azurerm_public_ip" "myterraformpublicip" {
     }
 }
 
+data "azurerm_public_ip" "pip" {
+  name                = azurerm_public_ip.myterraformpublicip.name
+  resource_group_name = azurerm_virtual_machine.myterraformpublicip.resource_group_name
+}
+
+output "public_ip_address" {
+  value = data.azurerm_public_ip.myterraformpublicip.ip_address
+}
+
+
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "myterraformnsg" {
     name                = "myNetworkSecurityGroup"
@@ -176,7 +186,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
       ]
 
       connection {
-        host        = azurerm_public_ip.myterraformpublicip.outputs.properties.ipAddress
+        host        = public_ip_address
         type        = "ssh"
         password    = var.pw
         user        = "azureuser"
