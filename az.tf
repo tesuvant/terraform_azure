@@ -126,14 +126,10 @@ resource "azurerm_storage_account" "mystorageaccount" {
 
 resource "azurerm_managed_disk" "osdisk" {
   create_option         = "FromImage"
-}
-
-resource "azurerm_virtual_machine" "test" {
-    delete_os_disk_on_termination = false
-    storage_os_disk {
-        create_option      = "attach"
-        managed_disk_id = "${azurerm_managed_disk.osdisk.id}"
-    }
+  location             = "westeurope"
+  storage_account_type = "Standard_LRS"
+  create_option        = "Empty"
+  disk_size_gb         = "1"
 }
 
 # Create virtual machine
