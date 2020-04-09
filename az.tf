@@ -147,7 +147,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
 
     os_profile {
         computer_name  = "myvm"
-        admin_username = "root"
+        admin_username = "azureuser"
         admin_password = var.pw
     }
 
@@ -184,7 +184,7 @@ resource "null_resource" "proxy_env" {
     host        = "${azurerm_public_ip.myterraformpublicip.ip_address}"
         type        = "ssh"
         password    = var.pw
-        user        = "root"
+        user        = "azureuser"
         timeout     = "10m"
   }
 
