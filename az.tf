@@ -126,6 +126,7 @@ resource "azurerm_storage_account" "mystorageaccount" {
 
 resource "azurerm_managed_disk" "osdisk" {
   name                 = "md"
+  resource_group_name  = azurerm_resource_group.myterraformgroup.name
   location             = "westeurope"
   storage_account_type = "Standard_LRS"
   create_option        = "Empty"
