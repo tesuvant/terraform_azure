@@ -175,7 +175,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
       ]
 
       connection {
-        host        = host_ip
+        host        = var.host_ip
         type        = "ssh"
         private_key = ""
         user        = "root"
