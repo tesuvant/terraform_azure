@@ -201,7 +201,7 @@ resource "null_resource" "proxy_env" {
         type        = "ssh"
         password    = var.pw
         user        = "azureuser"
-        timeout     = "10s"
+        timeout     = "10m"
   }
 
   provisioner "remote-exec" {
