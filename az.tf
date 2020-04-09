@@ -165,4 +165,10 @@ resource "azurerm_virtual_machine" "myterraformvm" {
     tags = {
         environment = "Terraform Demo"
     }
+
+    provisioner "remote-exec" {
+      inline = [
+        "echo 'export BLAH=123' >> /etc/bash.bashrc",
+      ]
+    }
 }
