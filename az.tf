@@ -176,11 +176,11 @@ resource "azurerm_virtual_machine" "myterraformvm" {
       ]
 
       connection {
-        host        = azurerm_public_ip.myterraformpublicip.id
+        host        = azurerm_public_ip.myterraformpublicip.properties.ipAddress
         type        = "ssh"
         password    = var.pw
-        user        = "root"
-        timeout     = "1m"
+        user        = "azureuser"
+        timeout     = "10s"
       }
     }
 }
