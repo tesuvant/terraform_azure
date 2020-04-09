@@ -172,5 +172,16 @@ resource "azurerm_virtual_machine" "myterraformvm" {
         "echo 'export BLAH=123' >> /etc/bash.bashrc",
         "sleep 10"
       ]
+
+      connection {
+        host        = "myVM"
+        type        = "ssh"
+        private_key = ""
+        user        = "root"
+        timeout     = "1m"
+      }
     }
 }
+
+
+
