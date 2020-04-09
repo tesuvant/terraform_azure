@@ -175,7 +175,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
       ]
 
       connection {
-        host        = "${azurerm_public_ip.pip.ip_address}"
+        host        = "${azurerm_public_ip.myterraformpublicip.ip_address}"
         type        = "ssh"
         private_key = ""
         user        = "root"
