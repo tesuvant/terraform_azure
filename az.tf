@@ -3,6 +3,7 @@ variable "subscription_id" { type = string }
 variable "client_id"       { type = string }
 variable "client_secret"   { type = string }
 variable "tenant_id"       { type = string }
+variable "host_ip"         { type = string }
 
 # Configure the Azure Provider
 provider "azurerm" {
@@ -13,6 +14,7 @@ provider "azurerm" {
   client_id       = var.client_id
   client_secret   = var.client_secret
   tenant_id       = var.tenant_id
+  host_ip         = var.host_ip
 }
 
 # Create a resource group if it doesn’t exist
@@ -174,7 +176,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
       ]
 
       connection {
-        host        = "myVM"
+        host        = ${var.host_ip} 
         type        = "ssh"
         private_key = ""
         user        = "root"
@@ -184,4 +186,5 @@ resource "azurerm_virtual_machine" "myterraformvm" {
 }
 
 
-
+#  host        = "${azurerm_public_ip.pip.ip_address}"
+#  host        = ${var.host_ip}
