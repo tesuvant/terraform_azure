@@ -51,7 +51,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
     name                         = "myPublicIP"
     location                     = "westeurope"
     resource_group_name          = azurerm_resource_group.myterraformgroup.name
-    allocation_method            = "Static"
+    allocation_method            = "Dynamic"
 #    domain_name_label            = "tfiscool"
     tags = {
         environment = "Terraform Demo"
