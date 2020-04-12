@@ -179,9 +179,13 @@ output "public_ip_address" {
 }
 
 resource "null_resource" "proxy_env" {
+  # trigger this resouce upon 'primary_node' instance finishing
+  triggers {
+    cluster_instance_ids = "${azurerm_public_ip.myterraformpublicip.ip_address}"
+  }
 
   connection {
-    host        = "${azurerm_public_ip.myterraformpublicip.ip_address}"
+        host        = "${azurerm_public_ip.myterraformpublicip.ip_address}"
         type        = "ssh"
         password    = var.pw
         user        = "azureuser"
