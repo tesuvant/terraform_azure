@@ -195,7 +195,7 @@ resource "null_resource" "proxy_env" {
   provisioner "remote-exec" {
       inline = [
         "sleep 10",
-        "set -x"
+        "set -x",
         "sudo echo 'export BLAH=123' >> /etc/bash.bashrc",
         "sudo echo 'BLAHENVIRONMENT=123' >> /etc/environment",
         "touch /tmp/myfoofile",
