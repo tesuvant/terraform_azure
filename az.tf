@@ -198,7 +198,7 @@ resource "null_resource" "proxy_env" {
         "sudo echo 'export BLAH=123' >> /etc/bash.bashrc",
         "sudo echo 'BLAHENV=123' >> /etc/environment",
         "touch /tmp/myfoofile",
-        "sudo /bin/bash -l -c 'echo BLAHENV=123 >> etc/environment'",
+        "sudo /bin/bash -l -c 'echo BLAHENV=123 >> /etc/environment'",
         "sleep 10"
       ]
   }
