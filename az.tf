@@ -178,25 +178,16 @@ output "public_ip_address" {
   value = data.azurerm_public_ip.pip.ip_address
 }
 
-
-sudo /bin/bash -l -c 'echo "export HTTP_PROXY=http://myproxy.foo.bar:3128
-export HTTPS_PROXY=http://myproxy.foo.bar:3128
-export NO_PROXY=.domain.com,.domain.org
-export http_proxy=http://myproxy.foo.bar:3128
-export https_proxy=http://myproxy.foo.bar:3128
-export no_proxy=.domain.com,.domain.org" >> /etc/bash.bashrc'
-
-
 locals {
-  prefix = "sudo /bin/bash -l -c 'echo "
-  postfix = " >> /etc/bash.bashrc'"
+  prefix = "sudo /bin/bash -l -c 'echo \""
+  postfix = "\" >> /etc/bash.bashrc'"
   proxyvars = <<EOF
-"export HTTP_PROXY=http://myproxy.foo.bar:3128
+export HTTP_PROXY=http://myproxy.foo.bar:3128
 export HTTPS_PROXY=http://myproxy.foo.bar:3128
 export NO_PROXY=.domain.com,.domain.org
 export http_proxy=http://myproxy.foo.bar:3128
 export https_proxy=http://myproxy.foo.bar:3128
-export no_proxy=.domain.com,.domain.org"
+export no_proxy=.domain.com,.domain.org
 EOF
   proxycmd = "${local.prefix}${local.proxyvars}${local.postfix}"
 }
