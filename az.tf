@@ -223,7 +223,7 @@ resource "azurerm_virtual_machine_extension" "foobar" {
 
   settings = <<EOF
     {
-        "fileUris": "
+        "fileUris": ["https://raw.githubusercontent.com/tesuvant/terraform_azure/master/helloworld.sh"],
         "commandToExecute": "./helloworld.sh"
     }
     EOF
