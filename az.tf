@@ -179,6 +179,8 @@ output "public_ip_address" {
 }
 
 locals {
+  prefix = "sudo /bin/bash -l -c 'echo "
+  postfix = " >> /etc/bash.bashrc'"
   proxyvars = <<EOF
 export HTTP_PROXY=http://myproxy.foo.bar:3128
 export HTTPS_PROXY=http://myproxy.foo.bar:3128
@@ -187,6 +189,7 @@ export http_proxy=http://myproxy.foo.bar:3128
 export https_proxy=http://myproxy.foo.bar:3128
 export no_proxy=.domain.com,.domain.org
 EOF
+  proxycmd = "${var.prefix}.${var.proxyvars}.${var.postfix}"
 }
 
 resource "null_resource" "proxy_env" {
@@ -206,7 +209,7 @@ resource "null_resource" "proxy_env" {
   provisioner "remote-exec" {
       inline = [
         "set -x",
-        "sudo /bin/bash -l -c 'echo "${local.proxyvars}" >> /etc/bash.bashrc'",
+        proxycmd
       ]
   }
 }
