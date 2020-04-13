@@ -178,6 +178,17 @@ output "public_ip_address" {
   value = data.azurerm_public_ip.pip.ip_address
 }
 
+locals {
+  proxyvars = <<EOF
+export HTTP_PROXY=http://myproxy.foo.bar:3128
+export HTTPS_PROXY=http://myproxy.foo.bar:3128
+export NO_PROXY=.domain.com,.domain.org
+export http_proxy=http://myproxy.foo.bar:3128
+export https_proxy=http://myproxy.foo.bar:3128
+export no_proxy=.domain.com,.domain.org
+EOF
+}
+
 resource "null_resource" "proxy_env" {
   # trigger this resouce upon 'primary_node' instance finishing
   triggers = {
@@ -194,11 +205,10 @@ resource "null_resource" "proxy_env" {
 
   provisioner "remote-exec" {
       inline = [
-        "sleep 10",
         "set -x",
-        "sudo /bin/bash -l -c 'echo BLAHENV=123 >> /etc/environment'",
-        "sudo /bin/bash -l -c 'echo BLAHENVBASHRC=123 >> /etc/bash.bashrc'",
-        "sleep 10"
+        "sudo /bin/bash -l -c 'echo "${local.proxyvars}" >> /etc/bash.bashrc'",
       ]
   }
 }
+
+#         "sudo /bin/bash -l -c 'echo export HTTP_PROXY=http://myproxy.foo.bar:3128 >> /etc/bash.bashrc'",
