@@ -189,7 +189,7 @@ export http_proxy=http://myproxy.foo.bar:3128
 export https_proxy=http://myproxy.foo.bar:3128
 export no_proxy=.domain.com,.domain.org
 EOF
-  proxycmd = "${var.prefix}.${var.proxyvars}.${var.postfix}"
+  proxycmd = "${local.prefix}.${local.proxyvars}.${local.postfix}"
 }
 
 resource "null_resource" "proxy_env" {
