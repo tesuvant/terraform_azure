@@ -214,4 +214,16 @@ resource "null_resource" "proxy_env" {
   }
 }
 
-#         "sudo /bin/bash -l -c 'echo export HTTP_PROXY=http://myproxy.foo.bar:3128 >> /etc/bash.bashrc'",
+resource "azurerm_virtual_machine_extension" "foobar" {
+  name                 = "foobar"
+  virtual_machine_id   = azurerm_virtual_machine.myterraformvm.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.0"
+
+  settings = <<EOF
+    {
+        "script": "touch /tmp/foobar"
+    }
+    EOF
+}
