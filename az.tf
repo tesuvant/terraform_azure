@@ -209,7 +209,7 @@ resource "null_resource" "proxy_env" {
   provisioner "remote-exec" {
       inline = [
         "set -x",
-        proxycmd
+        local.proxycmd
       ]
   }
 }
