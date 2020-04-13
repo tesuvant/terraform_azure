@@ -223,7 +223,8 @@ resource "azurerm_virtual_machine_extension" "foobar" {
 
   settings = <<EOF
     {
-        "script": "touch /tmp/foobar"
+        "fileUris": "
+        "commandToExecute": "./helloworld.sh"
     }
     EOF
 }
