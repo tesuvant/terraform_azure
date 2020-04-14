@@ -229,32 +229,32 @@ resource "null_resource" "proxy_env" {
 #    EOF
 #}
 
-variable "script" {
+variable "proxyscript" {
   default = <<-SCRIPT
-#!/bin/bash -eux
+#!/bin/bash
 cat << EOF >> /etc/bash.bashrc
-export HTTP_PROXY=http://base64enc.foo.bar:3128
-export HTTPS_PROXY=http://base64enc.foo.bar:3128
-export NO_PROXY=.domain.com,.base64enc.foo.bar.org
-export http_proxy=http://base64enc.foo.bar:3128
-export https_proxy=http://base64enc.foo.bar:3128
-export no_proxy=.domain.com,.base64enc.foo.bar.org
+### TF MANAGED BLOCK
+export HTTP_PROXY=http://foo.bar:8443
+export HTTPS_PROXY=http://foo.bar:8443
+export NO_PROXY=localhost,127.0.0.1
+export http_proxy=http://foo.bar:8443
+export https_proxy=http://foo.bar:8443
+export no_proxy=localhost,127.0.0.1
+### TF MANAGED BLOCK
 EOF
 SCRIPT
 }
 
-resource "azurerm_virtual_machine_extension" "barfoo" {
-  name                 = "barfoo"
-  virtual_machine_id   = azurerm_virtual_machine.myterraformvm.id
+resource "azurerm_virtual_machine_extension" "proxy" {
+  name                 = "proxy"
+  virtual_machine_id   = azurerm_linux_virtual_machine.main.id
   publisher            = "Microsoft.Azure.Extensions"
   type                 = "CustomScript"
   type_handler_version = "2.0"
 
   settings = <<SETTINGS
     {
-     "script": "${base64encode(var.script)}"
+     "script": "${base64encode(var.proxyscript)}"
     }
 SETTINGS
 }
-
-# "script": "IyEvYmluL2Jhc2gKY2F0IDw8IEVPRiA+PiAvZXRjL2Jhc2guYmFzaHJjCiMjIyBURiBNQU5BR0VEIEJMT0NLCmV4cG9ydCBIVFRQX1BST1hZPWZvbwpleHBvcnQgSFRUUFNfUFJPWFk9Zm9vCmV4cG9ydCBOT19QUk9YWT1sb2NhbGhvc3QsMTI3LjAuMC4xCmV4cG9ydCBodHRwX3Byb3h5PWZvbwpleHBvcnQgaHR0cHNfcHJveHk9Zm9vCmV4cG9ydCBub19wcm94eT1sb2NhbGhvc3QsMTI3LjAuMC4xCiMjIyBURiBNQU5BR0VEIEJMT0NLCkVPRgo="
