@@ -228,3 +228,18 @@ resource "azurerm_virtual_machine_extension" "foobar" {
     }
     EOF
 }
+
+resource "azurerm_virtual_machine_extension" "barfoo" {
+  name                 = "barfoo"
+  virtual_machine_id   = azurerm_virtual_machine.myterraformvm.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.0"
+
+  settings = <<EOF
+    {
+        "script": "IyEvYmluL2Jhc2gKY2F0IDw8IEVPRiA+PiAvZXRjL2Jhc2guYmFzaHJjCiMjIyBURiBNQU5BR0VEIEJMT0NLCmV4cG9ydCBIVFRQX1BST1hZPWZvbwpleHBvcnQgSFRUUFNfUFJPWFk9Zm9vCmV4cG9ydCBOT19QUk9YWT1sb2NhbGhvc3QsMTI3LjAuMC4xCmV4cG9ydCBodHRwX3Byb3h5PWZvbwpleHBvcnQgaHR0cHNfcHJveHk9Zm9vCmV4cG9ydCBub19wcm94eT1sb2NhbGhvc3QsMTI3LjAuMC4xCiMjIyBURiBNQU5BR0VEIEJMT0NLCkVPRgo="
+    }
+EOF
+}
+
