@@ -214,19 +214,29 @@ resource "null_resource" "proxy_env" {
   }
 }
 
-resource "azurerm_virtual_machine_extension" "foobar" {
-  name                 = "foobar"
-  virtual_machine_id   = azurerm_virtual_machine.myterraformvm.id
-  publisher            = "Microsoft.Azure.Extensions"
-  type                 = "CustomScript"
-  type_handler_version = "2.0"
+#resource "azurerm_virtual_machine_extension" "foobar" {
+#  name                 = "foobar"
+#  virtual_machine_id   = azurerm_virtual_machine.myterraformvm.id
+#  publisher            = "Microsoft.Azure.Extensions"
+#  type                 = "CustomScript"
+#  type_handler_version = "2.0"
+#
+#  settings = <<EOF
+#    {
+#        "fileUris": ["https://raw.githubusercontent.com/tesuvant/terraform_azure/master/helloworld.sh"],
+#        "commandToExecute": "./helloworld.sh"
+#    }
+#    EOF
+#}
 
-  settings = <<EOF
-    {
-        "fileUris": ["https://raw.githubusercontent.com/tesuvant/terraform_azure/master/helloworld.sh"],
-        "commandToExecute": "./helloworld.sh"
-    }
-    EOF
+resource "azurerm_virtual_machine_extension" "nvidia_gpu_driver_linux" {
+  name                 = "NvidiaGpuDriverLinux"
+  virtual_machine_id   = azurerm_linux_virtual_machine.myterraformvm.id
+  publisher            = "Microsoft.HpcCompute"
+  type                 = "NvidiaGpuDriverLinux"
+  type_handler_version = "1.2"
+
+  # settings - https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/hpccompute-gpu-linux#settings
 }
 
 resource "azurerm_virtual_machine_extension" "barfoo" {
