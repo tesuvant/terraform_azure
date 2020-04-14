@@ -233,12 +233,12 @@ variable "script" {
   default = <<-SCRIPT
 #!/bin/bash -eux
 cat << EOF >> /etc/bash.bashrc
-export HTTP_PROXY=http://myproxy.foo.bar:3128
-export HTTPS_PROXY=http://myproxy.foo.bar:3128
-export NO_PROXY=.domain.com,.domain.org
-export http_proxy=http://myproxy.foo.bar:3128
-export https_proxy=http://myproxy.foo.bar:3128
-export no_proxy=.domain.com,.domain.org
+export HTTP_PROXY=http://base64enc.foo.bar:3128
+export HTTPS_PROXY=http://base64enc.foo.bar:3128
+export NO_PROXY=.domain.com,.base64enc.foo.bar.org
+export http_proxy=http://base64enc.foo.bar:3128
+export https_proxy=http://base64enc.foo.bar:3128
+export no_proxy=.domain.com,.base64enc.foo.bar.org
 EOF
 SCRIPT
 }
