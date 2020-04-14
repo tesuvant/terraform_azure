@@ -229,14 +229,18 @@ resource "null_resource" "proxy_env" {
 #    EOF
 #}
 
-resource "azurerm_virtual_machine_extension" "nvidia_gpu_driver_linux" {
-  name                 = "NvidiaGpuDriverLinux"
-  virtual_machine_id   = azurerm_virtual_machine.myterraformvm.id
-  publisher            = "Microsoft.HpcCompute"
-  type                 = "NvidiaGpuDriverLinux"
-  type_handler_version = "1.2"
-
-  # settings - https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/hpccompute-gpu-linux#settings
+variable "script" {
+  default = <<-SCRIPT
+#!/bin/bash -eux
+cat << EOF >> /etc/bash.bashrc
+export HTTP_PROXY=http://myproxy.foo.bar:3128
+export HTTPS_PROXY=http://myproxy.foo.bar:3128
+export NO_PROXY=.domain.com,.domain.org
+export http_proxy=http://myproxy.foo.bar:3128
+export https_proxy=http://myproxy.foo.bar:3128
+export no_proxy=.domain.com,.domain.org
+EOF
+SCRIPT
 }
 
 resource "azurerm_virtual_machine_extension" "barfoo" {
@@ -246,10 +250,11 @@ resource "azurerm_virtual_machine_extension" "barfoo" {
   type                 = "CustomScript"
   type_handler_version = "2.0"
 
-  settings = <<EOF
+  settings = <<SETTINGS
     {
-        "script": "IyEvYmluL2Jhc2gKY2F0IDw8IEVPRiA+PiAvZXRjL2Jhc2guYmFzaHJjCiMjIyBURiBNQU5BR0VEIEJMT0NLCmV4cG9ydCBIVFRQX1BST1hZPWZvbwpleHBvcnQgSFRUUFNfUFJPWFk9Zm9vCmV4cG9ydCBOT19QUk9YWT1sb2NhbGhvc3QsMTI3LjAuMC4xCmV4cG9ydCBodHRwX3Byb3h5PWZvbwpleHBvcnQgaHR0cHNfcHJveHk9Zm9vCmV4cG9ydCBub19wcm94eT1sb2NhbGhvc3QsMTI3LjAuMC4xCiMjIyBURiBNQU5BR0VEIEJMT0NLCkVPRgo="
+     "script": "${base64encode(var.script)}"
     }
-EOF
+SETTINGS
 }
 
+# "script": "IyEvYmluL2Jhc2gKY2F0IDw8IEVPRiA+PiAvZXRjL2Jhc2guYmFzaHJjCiMjIyBURiBNQU5BR0VEIEJMT0NLCmV4cG9ydCBIVFRQX1BST1hZPWZvbwpleHBvcnQgSFRUUFNfUFJPWFk9Zm9vCmV4cG9ydCBOT19QUk9YWT1sb2NhbGhvc3QsMTI3LjAuMC4xCmV4cG9ydCBodHRwX3Byb3h5PWZvbwpleHBvcnQgaHR0cHNfcHJveHk9Zm9vCmV4cG9ydCBub19wcm94eT1sb2NhbGhvc3QsMTI3LjAuMC4xCiMjIyBURiBNQU5BR0VEIEJMT0NLCkVPRgo="
