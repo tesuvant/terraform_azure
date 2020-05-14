@@ -15,7 +15,8 @@ provider "dns" {
 output "inconsult_addrs" {
 #  value = "${join(",", data.dns_a_record_set.allow_hosts.addrs)}"
   #value = data.dns_a_record_set.allow_hosts[*].addrs
-  value = tolist(data.dns_a_record_set.allow_hosts[*])
+  #value = tolist(data.dns_a_record_set.allow_hosts[*])     # returns: addrs, host, id
+  value = "${join(",", data.dns_a_record_set.allow_hosts[*].addrs)}"
 }
 #   "outputs": {
 #     "inconsult_addrs": {
@@ -72,7 +73,7 @@ resource "azurerm_network_security_group" "myterraformnsg" {
     
     security_rule {
         name                       = "SSH"
-        priority                   = 1001
+        priority                   = 1002
         direction                  = "Inbound"
         access                     = "Allow"
         protocol                   = "Tcp"
