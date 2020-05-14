@@ -14,7 +14,8 @@ provider "dns" {
 
 output "inconsult_addrs" {
 #  value = "${join(",", data.dns_a_record_set.allow_hosts.addrs)}"
-  value = data.dns_a_record_set.allow_hosts[*].addrs.inconsult_addrs
+  #value = data.dns_a_record_set.allow_hosts[*].addrs
+  value = tolist(data.dns_a_record_set.allow_hosts[*].addrs)
 }
 #   "outputs": {
 #     "inconsult_addrs": {
