@@ -12,6 +12,11 @@ provider "dns" {
   }
 }
 
+output "inconsult_addrs" {
+#  value = "${join(",", data.dns_a_record_set.allow_hosts.addrs)}"
+  value = data.dns_a_record_set.allow_hosts[*].addrs
+}
+
  data "dns_a_record_set" "allow_hosts" {
    count = length(var.nsg_hosts_allow)
    host  = var.nsg_hosts_allow[count.index]
@@ -43,8 +48,8 @@ resource "azurerm_network_security_group" "myterraformnsg" {
         protocol                   = "Tcp"
         source_port_range          = "*"
         destination_port_range     = "22"
-        source_address_prefixes    = data.dns_a_record_set.allow_hosts[*].addrs
-        #source_address_prefix      = "*"
+        #source_address_prefixes    = data.dns_a_record_set.allow_hosts[*].addrs
+        source_address_prefix      = "*"
         destination_address_prefix = "*"
     }
     
