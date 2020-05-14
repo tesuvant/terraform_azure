@@ -4,6 +4,18 @@ variable "client_id"       { type = string }
 variable "client_secret"   { type = string }
 variable "tenant_id"       { type = string }
 variable "pw"              { type = string }
+variable "nsg_hosts_allow" { type = list(string) }
+
+provider "dns" {
+  update {
+    server = "8.8.8.8"
+  }
+}
+
+ data "dns_a_record_set" "allow_hosts" {
+   count = length(var.nsg_hosts_allow)
+   host  = var.nsg_hosts_allow[count.index]
+ }
 
 # Configure the Azure Provider
 provider "azurerm" {
@@ -14,6 +26,31 @@ provider "azurerm" {
   client_id       = var.client_id
   client_secret   = var.client_secret
   tenant_id       = var.tenant_id
+}
+
+
+# Create Network Security Group and rule
+resource "azurerm_network_security_group" "myterraformnsg" {
+    name                = "myNetworkSecurityGroup"
+    location            = "westeurope"
+    resource_group_name = azurerm_resource_group.myterraformgroup.name
+    
+    security_rule {
+        name                       = "SSH"
+        priority                   = 1001
+        direction                  = "Inbound"
+        access                     = "Allow"
+        protocol                   = "Tcp"
+        source_port_range          = "*"
+        destination_port_range     = "22"
+        source_address_prefixes    = data.dns_a_record_set.allow_hosts[*].addrs
+        #source_address_prefix      = "*"
+        destination_address_prefix = "*"
+    }
+    
+    tags = {
+        environment = "Terraform Demo"
+    }
 }
 
 # Create a resource group if it doesn’t exist
@@ -58,28 +95,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
     }
 }
 
-# Create Network Security Group and rule
-resource "azurerm_network_security_group" "myterraformnsg" {
-    name                = "myNetworkSecurityGroup"
-    location            = "westeurope"
-    resource_group_name = azurerm_resource_group.myterraformgroup.name
-    
-    security_rule {
-        name                       = "SSH"
-        priority                   = 1001
-        direction                  = "Inbound"
-        access                     = "Allow"
-        protocol                   = "Tcp"
-        source_port_range          = "*"
-        destination_port_range     = "22"
-        source_address_prefix      = "*"
-        destination_address_prefix = "*"
-    }
 
-    tags = {
-        environment = "Terraform Demo"
-    }
-}
 
 # Create network interface
 resource "azurerm_network_interface" "myterraformnic" {
@@ -178,19 +194,19 @@ output "public_ip_address" {
   value = data.azurerm_public_ip.pip.ip_address
 }
 
-locals {
-  prefix = "sudo /bin/bash -l -c 'echo \""
-  postfix = "\" >> /etc/bash.bashrc'"
-  proxyvars = <<EOF
-export HTTP_PROXY=http://myproxy.foo.bar:3128
-export HTTPS_PROXY=http://myproxy.foo.bar:3128
-export NO_PROXY=.domain.com,.domain.org
-export http_proxy=http://myproxy.foo.bar:3128
-export https_proxy=http://myproxy.foo.bar:3128
-export no_proxy=.domain.com,.domain.org
-EOF
-  proxycmd = "${local.prefix}${local.proxyvars}${local.postfix}"
-}
+# locals {
+#   prefix = "sudo /bin/bash -l -c 'echo \""
+#   postfix = "\" >> /etc/bash.bashrc'"
+#   proxyvars = <<EOF
+# export HTTP_PROXY=http://myproxy.foo.bar:3128
+# export HTTPS_PROXY=http://myproxy.foo.bar:3128
+# export NO_PROXY=.domain.com,.domain.org
+# export http_proxy=http://myproxy.foo.bar:3128
+# export https_proxy=http://myproxy.foo.bar:3128
+# export no_proxy=.domain.com,.domain.org
+# EOF
+#   proxycmd = "${local.prefix}${local.proxyvars}${local.postfix}"
+# }
 
 resource "null_resource" "proxy_env" {
   # trigger this resouce upon 'primary_node' instance finishing
@@ -206,12 +222,12 @@ resource "null_resource" "proxy_env" {
         timeout     = "10m"
   }
 
-  provisioner "remote-exec" {
-      inline = [
-        "set -x",
-        local.proxycmd
-      ]
-  }
+#   provisioner "remote-exec" {
+#       inline = [
+#         "set -x",
+#         local.proxycmd
+#       ]
+#   }
 }
 
 #resource "azurerm_virtual_machine_extension" "foobar" {
