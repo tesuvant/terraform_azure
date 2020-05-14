@@ -1,1 +1,1 @@
-nsg_hosts_allow     = ["itconsult.berlin"]
+nsg_hosts_allow     = ["itconsult.berlin", "itconsult.berlin"]
