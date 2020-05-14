@@ -81,7 +81,8 @@ resource "azurerm_network_security_group" "myterraformnsg" {
         destination_port_range     = "22"
         #source_address_prefixes    = tolist(data.dns_a_record_set.allow_hosts[*].addrs)
         #source_address_prefixes    = data.dns_a_record_set.allow_hosts[*].addrs
-        source_address_prefix      = "*"
+        source_address_prefixes    = flatten(data.dns_a_record_set.allow_hosts.*.addrs)
+        #source_address_prefix      = "*"
         destination_address_prefix = "*"
     }
     
