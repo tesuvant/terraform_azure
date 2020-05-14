@@ -15,7 +15,7 @@ provider "dns" {
 output "inconsult_addrs" {
 #  value = "${join(",", data.dns_a_record_set.allow_hosts.addrs)}"
   #value = data.dns_a_record_set.allow_hosts[*].addrs
-  value = tolist(data.dns_a_record_set.allow_hosts[*].addrs)
+  value = tolist(data.dns_a_record_set.allow_hosts[*])
 }
 #   "outputs": {
 #     "inconsult_addrs": {
@@ -78,7 +78,8 @@ resource "azurerm_network_security_group" "myterraformnsg" {
         protocol                   = "Tcp"
         source_port_range          = "*"
         destination_port_range     = "22"
-        source_address_prefixes    = tolist(data.dns_a_record_set.allow_hosts[*].addrs)
+        #source_address_prefixes    = tolist(data.dns_a_record_set.allow_hosts[*].addrs)
+        #source_address_prefixes    = data.dns_a_record_set.allow_hosts[*].addrs
         source_address_prefix      = "*"
         destination_address_prefix = "*"
     }
