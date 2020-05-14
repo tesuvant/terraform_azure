@@ -14,8 +14,37 @@ provider "dns" {
 
 output "inconsult_addrs" {
 #  value = "${join(",", data.dns_a_record_set.allow_hosts.addrs)}"
-  value = data.dns_a_record_set.allow_hosts[*].addrs
+  value = data.dns_a_record_set.allow_hosts[*].addrs.inconsult_addrs
 }
+#   "outputs": {
+#     "inconsult_addrs": {
+#       "value": [
+#         [
+#           "35.214.195.220"
+#         ],
+#         [
+#           "35.214.195.220"
+#         ]
+#       ],
+#       "type": [
+#         "tuple",
+#         [
+#           [
+#             "list",
+#             "string"
+#           ],
+#           [
+#             "list",
+#             "string"
+#           ]
+#         ]
+#       ]
+#     },
+#     "public_ip_address": {
+#       "value": "104.46.51.54",
+#       "type": "string"
+#     }
+#   },
 
  data "dns_a_record_set" "allow_hosts" {
    count = length(var.nsg_hosts_allow)
